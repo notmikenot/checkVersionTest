@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { VersionCheckService } from './core/version-check/version-check.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -11,6 +12,7 @@ import { VersionCheckService } from './core/version-check/version-check.service'
     ],
     imports: [
         BrowserModule,
+        HttpClientModule,
         AppRoutingModule
     ],
     providers: [VersionCheckService],
