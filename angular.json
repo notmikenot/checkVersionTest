@@ -53,11 +53,6 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
                 }
               ]
             },
@@ -67,10 +62,10 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "deleteOutputPath": false,
               "budgets": [
                 {
                   "type": "initial",
@@ -141,6 +136,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "check-version-test"
+    }
+  },
+  "defaultProject": "check-version-test",
+  "cli": {
+    "analytics": "52476886-e78c-4d90-b363-786a7f9e84fd"
+  }
 }
