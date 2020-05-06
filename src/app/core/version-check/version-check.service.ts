@@ -5,7 +5,7 @@ import { VersionResponseInterface } from '../../shared/interface/response/versio
 @Injectable()
 export class VersionCheckService {
 
-    private currentHash = '{{POST_BUILD_ENTERS_HASH_HERE}}';
+    private currentVersion = '{{POST_BUILD_ENTERS_HASH_HERE}}';
     private refreshMinutes = 3;
 
     constructor(private http: HttpClient) {
@@ -32,31 +32,31 @@ export class VersionCheckService {
         this.http.get<VersionResponseInterface[]>(currentPath + url + '?t=' + new Date().getTime())
             .subscribe(
                 (response: VersionResponseInterface[]) => {
-                    const lastHash = getLastHashByDate(response);
-                    const hashChanged = hasHashChanged(this.currentHash, lastHash);
+                    const lastVersion = getLastVersionByDate(response);
+                    const hashChanged = hasVersionChanged(this.currentVersion, lastVersion);
                     if (hashChanged) {
-                        console.log('Nuova versione disponibile (v.' + lastHash + ')');
+                        console.log('Nuova versione disponibile (v.' + lastVersion + ')');
                         // window.location.reload();
                     } else {
-                        console.log('L\'applicazione è aggiornata (v.' + lastHash + ')');
+                        console.log('L\'applicazione è aggiornata (v.' + lastVersion + ')');
                     }
-                    this.currentHash = lastHash;
+                    this.currentVersion = lastVersion;
                 },
                 (err) => {
-                    console.error(err, 'Could not get version');
+                    console.error(err, 'Impossibile trovare la versione');
                 }
             );
 
-        function hasHashChanged(currentHash: string, newHash: string): boolean {
-            if (!currentHash || currentHash === '{{POST_BUILD_ENTERS_HASH_HERE}}') {
+        function hasVersionChanged(currentVersion: string, newVersion: string): boolean {
+            if (!currentVersion || currentVersion === '{{POST_BUILD_ENTERS_HASH_HERE}}') {
                 return false;
             }
-            return currentHash !== newHash;
+            return currentVersion !== newVersion;
         }
 
-        function getLastHashByDate(hashes: VersionResponseInterface[]): string {
+        function getLastVersionByDate(hashes: VersionResponseInterface[]): string {
             if (hashes) {
-                return hashes.sort(dateSorter)[hashes.length - 1].hash;
+                return hashes.sort(dateSorter)[hashes.length - 1].version;
             }
         }
     }

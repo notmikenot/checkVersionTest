@@ -58,8 +58,8 @@ function setVersionJSON() {
                 return writeFile(versionFilePath, JSON.stringify(_sources));
             })
         }).catch(err => {
-            console.log('Error with post build:', err);
-        });
+        console.log('Error with post build:', err);
+    });
 }
 
 async function pushSources(mainBundleFiles, mainBundleRegexp) {
@@ -75,6 +75,7 @@ async function pushSources(mainBundleFiles, mainBundleRegexp) {
                 let src = {};
                 src.hash = mainHash;
                 src.date = fsStat.mtime;
+                src.version = getVersion(mainHash, fsStat.mtime)
                 _sources.push(src)
             });
         }
@@ -95,4 +96,10 @@ async function copyFileSync(source, target) {
 
     await fs.writeFileSync(targetFile, fs.readFileSync(source));
     return source;
+}
+
+function getVersion(hash, date) {
+    const day = ('' + new Date(date).getDate()).length === 1 ? '0' + new Date(date).getDate() : new Date(date).getDate();
+    const month = ('' + (new Date(date).getMonth() + 1)).length === 1 ? '0' + (new Date(date).getMonth() + 1) : (new Date(date).getMonth() + 1);
+    return `${day}${month}${new Date(date).getFullYear()}_${('' + hash.substr(1, 5)).toUpperCase()}`;
 }
