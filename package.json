@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch-serve": "ng build --watch --configuration=watch",
+    "post-build": "node ./build/post-build.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
