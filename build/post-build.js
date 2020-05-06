@@ -57,21 +57,7 @@ function setVersionJSON() {
                 console.log('sources', _sources);
                 return writeFile(versionFilePath, JSON.stringify(_sources));
             })
-        })//.then(() => {
-        // main bundle file not found, dev build?
-        /*if (!mainBundleFile) {
-            return;
-        }
-        console.log(`Replacing hash in the ${mainBundleFile}`);
-        // replace hash placeholder in our main.js file so the code knows it's current hash
-        const mainFilepath = path.join(__dirname, '/../dist/check-version-test', mainBundleFile);
-        return readFile(mainFilepath, 'utf8')
-            .then(mainFileData => {
-                const replacedFile = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
-                return writeFile(mainFilepath, replacedFile);
-            });*/
-        // })
-        .catch(err => {
+        }).catch(err => {
             console.log('Error with post build:', err);
         });
 }

@@ -32,14 +32,15 @@ export class VersionCheckService {
         this.http.get<VersionResponseInterface[]>(currentPath + url + '?t=' + new Date().getTime())
             .subscribe(
                 (response: VersionResponseInterface[]) => {
-                    const hash = getLastHashByDate(response);
-                    const hashChanged = hasHashChanged(this.currentHash, hash);
+                    const lastHash = getLastHashByDate(response);
+                    const hashChanged = hasHashChanged(this.currentHash, lastHash);
                     if (hashChanged) {
-                        window.location.reload();
+                        console.log('Nuova versione disponibile (v.' + lastHash + ')');
+                        // window.location.reload();
                     } else {
-                        console.log('No new version is available');
+                        console.log('L\'applicazione è aggiornata (v.' + lastHash + ')');
                     }
-                    this.currentHash = hash;
+                    this.currentHash = lastHash;
                 },
                 (err) => {
                     console.error(err, 'Could not get version');
@@ -53,11 +54,21 @@ export class VersionCheckService {
             return currentHash !== newHash;
         }
 
-        function getLastHashByDate(response: VersionResponseInterface[]): string {
-            let lastHash = '';
-            lastHash = response[response.length - 1].hash;
-            return lastHash;
+        function getLastHashByDate(hashes: VersionResponseInterface[]): string {
+            if (hashes) {
+                return hashes.sort(dateSorter)[hashes.length - 1].hash;
+            }
         }
     }
 
+}
+
+export function dateSorter(a: VersionResponseInterface, b: VersionResponseInterface) {
+    if (a.date < b.date) {
+        return 1;
+    }
+    if (a.date > b.date) {
+        return -1;
+    }
+    return 0;
 }
