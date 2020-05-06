@@ -29,10 +29,10 @@ export class VersionCheckService {
      */
     private checkVersion(url: string): void {
         const currentPath = `${window.location.protocol}//${window.location.hostname}/`;
-        this.http.get<VersionResponseInterface>(currentPath + url + '?t=' + new Date().getTime())
+        this.http.get<VersionResponseInterface[]>(currentPath + url + '?t=' + new Date().getTime())
             .subscribe(
-                (response: VersionResponseInterface) => {
-                    const hash = response.hash;
+                (response: VersionResponseInterface[]) => {
+                    const hash = getLastHashByDate(response);
                     const hashChanged = hasHashChanged(this.currentHash, hash);
                     if (hashChanged) {
                         window.location.reload();
@@ -51,6 +51,12 @@ export class VersionCheckService {
                 return false;
             }
             return currentHash !== newHash;
+        }
+
+        function getLastHashByDate(response: VersionResponseInterface[]): string {
+            let lastHash = '';
+            lastHash = response[response.length - 1].hash;
+            return lastHash;
         }
     }
 
